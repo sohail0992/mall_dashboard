@@ -1,0 +1,6 @@
+{
+  "name": "AdevertisementDetails",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./AdevertisementDetails.js"
+}
