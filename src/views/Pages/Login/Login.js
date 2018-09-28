@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {Container, Row, Col, CardGroup, Card, CardBlock, Button, Input, InputGroup, InputGroupAddon} from "reactstrap";
 
-
 class Login extends Component {
   render() {
     return (
