@@ -21,14 +21,128 @@ import {
   InputGroupAddon,
   InputGroupButton
 } from "reactstrap";
-
+import axios from "axios";
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250
+    }
+  }
+};
 class SocialButtons extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selected_mall:'',
+      data: [],
+      mall_name:'',
+      mall_address: '',
+      mall_shops:[],
+      selected_shop:''
+    };
+    this.getShopDetails()
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
+    this.handleShop = this.handleShop.bind(this);
  }
- 
-  render() {
+
+handleShop(event){
+  this.setState({ [event.target.name]: event.target.value });
+  if(this.state.data.mall_shops.shops && this.state.data.mall_shops.shops.length>0)
+   this.state.data.mall_shops.shops.map(shop =>{
+       if(event.target.value.localeCompare(shop.id)===0){
+           console.log(shop,'shop')
+       }
+   })
+}
+
+handleSelect(event){
+  this.setState({ [event.target.name]: event.target.value });
+  // console.log( event.target.value ,'value')
+  // console.log(event.target.value,'selecetd id')
+  this.state.data.map(mall=> {
+    if(event.target.value.localeCompare(mall.id)===0){
+        // console.log(mall.sho,'selected mall data')s
+        // console.log(mall,'mall')
+        this.setState({
+          mall_name:mall.name,
+          mall_address: mall.address,
+          mall_shops:mall
+      })
+    }
+  })
+  // console.log(this.state,'state now')
+}
+
+handleInit(value){
+  this.state.data.map(mall=> {
+    if(value.localeCompare(mall.id)===0){
+        // console.log(mall.sho,'selected mall data')s
+        // console.log(mall,'mall')
+        this.setState({
+          mall_name:mall.name,
+          mall_address: mall.address,
+          mall_shops:mall
+      })
+    }
+  })
+  // console.log(this.state,'state now')
+}
+
+handleSubmit(event){
+   event.preventDefault();
+   console.log(event,'event')
+   console.log(this.state)
+}
+
+handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+}
+
+getShopDetails(){
+    var headers = {
+      "x-access-key": "Q4OR-TCXT-AO1B-M61K"
+    };
+    axios
+      .get("https://mcmall.herokuapp.com/api/users/editShopDetails", {
+        headers: headers
+      })
+      .then(response => {
+         let malls = []
+          console.log(response.data,'response')
+          if(response.data){
+            response.data.mallsAndShops.map(value => {
+                malls.push({
+                  id : value.mall.id,
+                  name : value.mall.name,
+                  address: value.mall.address,
+                  city: value.mall.city,
+                  image: value.mall.image,
+                  latitude: value.mall.latitude,
+                  live_status: value.mall.live_status,
+                  longitude: value.mall.longitude,
+                  shops: value.shops
+                })
+            })
+          // console
+          this.setState({data: malls})
+          // this.setState({mall_shops:malls.shops})
+        }
+        this.setState({selected_mall:malls[0].id})
+        this.handleInit(malls[0])
+        console.log(this.state,'state')
+      
+      })
+      .catch(error => {
+        console.log(error);
+      });
+}
+
+ render() {
     return (
       <div className="animated fadeIn">
         <Row>
@@ -49,66 +163,74 @@ class SocialButtons extends Component {
                       <Label htmlFor="ccmall">Select Mall</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="select" name="ccmall" id="ccmall">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
+                       <Input
+                        id="ccmall"
+                        type="select"
+                        name="selected_mall"
+                        value={this.state.selected_mall}
+                        onChange={this.handleSelect}
+                      >
+                       {this.state.data.map(name => (
+                          <option
+                            key={name.name}
+                            value={name.id}
+                          >
+                          {name.name}
+                          </option>
+                        ))}
                       </Input>
                     </Col>
                   </FormGroup>
                   <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="text-input">Mall Name</Label>
+                      <Label htmlFor="mall_name">Mall Name</Label>
                     </Col>
                     <Col xs="12" md="9">
                       <Input
                         type="text"
-                        id="text-input"
-                        name="text-input"
+                        id="mall_name"
+                        name="mall_name"
                         placeholder="Mall Name"
+                        value={this.state.mall_name}
+                        readOnly
                       />
                     </Col>
                   </FormGroup>
                     <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="text-input">Mall Address</Label>
+                      <Label htmlFor="mall_address">Mall Address</Label>
                     </Col>
                     <Col xs="12" md="9">
                       <Input
                         type="text"
-                        id="text-input"
-                        name="text-input"
+                        id="mall_address"
+                        name="mall_address"
+                        value={this.state.mall_address}
                         placeholder="Mall Address"
+                        readOnly
                       />
                     </Col>
                   </FormGroup>
                     <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="ccmall">Shop list</Label>
+                      <Label htmlFor="ccshop">Shop list</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="select" name="ccmall" id="ccmall">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
+                      <Input type="select" name="selected_shop" value={this.state.selected_shop} onChange={this.handleShop} id="ccshop" >
+                         {this.state.mall_shops.shops &&  this.state.mall_shops.shops.length > 0  ? 
+                           this.state.mall_shops.shops.map(shop => (
+                            <option
+                              key={shop.name}
+                              value={shop.id}
+                            >
+                            {shop.name}
+                            </option> 
+                          ))
+                         : 
+                         <option>
+                           No data
+                         </option>
+                       }
                       </Input>
                     </Col>
                   </FormGroup>
@@ -229,7 +351,7 @@ class SocialButtons extends Component {
                 </Form>
               </CardBlock>
               <CardFooter>
-                <Button type="submit" size="sm" color="primary">
+                <Button type="submit" size="sm" color="primary" onClick={this.handleSubmit}>
                   <i className="fa fa-dot-circle-o" /> Submit
                 </Button>
               </CardFooter>

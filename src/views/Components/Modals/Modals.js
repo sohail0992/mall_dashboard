@@ -21,13 +21,63 @@ import {
   InputGroupAddon,
   InputGroupButton
 } from "reactstrap";
+import axios from "axios";
 
 class Models extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      res:''
+    };
+    this.getCategories()
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+ }
+
+ getCategories(){
+   var headers = {
+      "x-access-key": "Q4OR-TCXT-AO1B-M61K"
+    };
+    axios
+      .get("https://mcmall.herokuapp.com/api/users/getCategories", {
+        headers: headers
+      })
+      .then(response => {
+        this.setState({res:response.data})
+        console.log(response.data,'res')
+        
+      })
+      .catch(error => {
+        console.log(error);
+      });
+ }
+
+ handleSubmit(){
+   event.preventDefault();
+    var headers = {
+      "x-access-key": "Q4OR-TCXT-AO1B-M61K",
+      "Content-Type":"application/json"
+    };
+    console.log(this.state)
+   
+    var data = {
+      name: this.state.category_name,
+    };
+    axios.post("https://mcmall.herokuapp.com/api/users/createCategory", data, {
+        headers: headers
+      })
+      .then(response => {
+        console.log(response,'res');
+      })
+      .catch(error => {
+        console.log(error);
+      });
  }
  
+ handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+ }
+
   render() {
     return (
       <div className="animated fadeIn">
@@ -51,8 +101,10 @@ class Models extends Component {
                       <Col xs="12" md="9">
                         <Input
                           type="text"
-                          id="text-input"
-                          name="text-input"
+                          id="category_name"
+                          name="category_name"
+                          value={this.state.category_name}
+                          onChange={this.handleChange}
                           placeholder="Mall Name"
                         />
                       </Col>
@@ -60,7 +112,7 @@ class Models extends Component {
                   </Form>
                 </CardBlock>
                 <CardFooter>
-                  <Button type="submit" size="sm" color="primary"  style={{'float': 'none', 'margin': '0 auto'}}>
+                  <Button type="submit" size="sm" color="primary"  style={{'float': 'none', 'margin': '0 auto'}} onClick={this.handleSubmit}>
                     <i className="fa fa-dot-circle-o"/> Add
                   </Button>
                 </CardFooter>

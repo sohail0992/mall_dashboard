@@ -21,7 +21,6 @@ import {
   InputGroupButton
 } from "reactstrap";
 
-
 class AdevertisementDetails extends Component {
   render() {
     return (
