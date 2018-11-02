@@ -1,3 +1,4 @@
+import './forms.css';
 import React, { Component } from "react";
 import {
   Row,
@@ -20,7 +21,29 @@ import {
   InputGroupAddon,
   InputGroupButton
 } from "reactstrap";
+import Loader from 'react-loader';
 import axios from "axios";
+var options = {
+    lines: 13,
+    length: 20,
+    width: 10,
+    radius: 30,
+    scale: 1.00,
+    corners: 1,
+    color: '#000',
+    opacity: 0.25,
+    rotate: 0,
+    direction: 1,
+    speed: 1,
+    trail: 60,
+    fps: 20,
+    zIndex: 2e9,
+    top: '50%',
+    left: '50%',
+    shadow: false,
+    hwaccel: false,
+    position: 'absolute'
+};
 class Forms extends Component {
   constructor(props) {
     super(props);
@@ -30,11 +53,21 @@ class Forms extends Component {
       shop_city:'',
       shop_image:'',
       shop_longitude:'',
-      shop_latitude:''
+      shop_latitude:'',
+      missing : '',
+      loaded: true, 
+      profile: null 
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    
+  }
+
+  startLoading(){
+    this.setState({loaded: false });
+  }
+
+  stoploading(){
+    this.setState({loaded: true });
   }
 
   handleChange(event) {
@@ -43,12 +76,18 @@ class Forms extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    this.startLoading()
     var headers = {
       "x-access-key": "Q4OR-TCXT-AO1B-M61K",
       "Content-Type":"application/json"
     };
-    console.log(this.state)
-   
+    console.log(this.state,'state')
+    if(!this.state.shop_name || !this.state.shop_city){
+      this.stoploading()
+      this.setState({missing:true})
+      return
+    }
+    this.setState({missing:false})
     var data = {
       name: this.state.shop_name,
       address: this.state.shop_address,
@@ -65,9 +104,12 @@ class Forms extends Component {
       })
       .then(response => {
         console.log(response,'res');
+        this.state = null
+        this.stoploading()
       })
       .catch(error => {
         console.log(error);
+        this.stoploading()
       });
   }
 
@@ -75,11 +117,17 @@ class Forms extends Component {
   render() {
     return (
       <div className="animated fadeIn">
+        <Loader loaded={this.state.loaded} options={options} className="spinner" />
         <Row>
           <Col xs="12" md="6" style={{'float': 'none', 'margin': '0 auto'}}>
             <Card>
               <CardHeader>
                 <strong>Create Mail</strong>
+                 {this.state.missing ?
+                  <span className="red"> Required field missing</span>
+                  :
+                  null
+                 }
               </CardHeader>
               <CardBlock className="card-body">
                 <Form
@@ -100,6 +148,7 @@ class Forms extends Component {
                         placeholder="Mall Name"
                         value={this.state.shop_name}
                         onChange={this.handleChange}
+                        required
                       />
                     </Col>
                   </FormGroup>
