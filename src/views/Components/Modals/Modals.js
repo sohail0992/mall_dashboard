@@ -34,8 +34,10 @@ class Models extends Component {
       deleteCat: "",
       deleteSubCat:"",
       deleteSubCatSub:"",
+      subCategories:[]
     };
     this.getCategories();
+    this.getAllSubCategores();
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSubCategory = this.handleSubCategory.bind(this);
@@ -54,6 +56,34 @@ class Models extends Component {
       .then(response => {
         this.setState({ res: response.data });
         console.log(response.data,'cat')
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  getAllSubCategores() {
+    var headers = {
+      "x-access-key": "Q4OR-TCXT-AO1B-M61K"
+    };
+    axios
+      .get("https://mcmall.herokuapp.com/api/users/getAllCategories", {
+        headers: headers
+      })
+      .then(response => {
+        var catWithSub = [];
+        var onlySub = [];
+        this.setState({ Categories: response.data.message });
+        response.data.message.map(cat => {
+          if (cat.subCategories) {
+            cat.subCategories.map(subCat => {
+              if (subCat) {
+                onlySub.push(subCat);
+              }
+            });
+          }
+        });
+        this.setState({ subCategories: onlySub });
       })
       .catch(error => {
         console.log(error);
@@ -440,8 +470,8 @@ class Models extends Component {
                         value={this.state.deleteSubCatSub}
                         onChange={this.handleChange}
                       >
-                        {this.state.res && this.state.res.message.length > 0 ? (
-                          this.state.res.message.map(each => (
+                        {this.state.subCategories  ? (
+                          this.state.subCategories.map(each => (
                             <option key={each.name} value={each.id}>
                               {each.name}
                             </option>
