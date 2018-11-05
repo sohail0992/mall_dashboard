@@ -52,26 +52,18 @@ class SocialButtons extends Component {
 
 handleShop(event){
   this.setState({ [event.target.name]: event.target.value });
-  if(this.state.data.mall_shops.shops && this.state.data.mall_shops.shops.length>0)
-   this.state.data.mall_shops.shops.map(shop =>{
-       if(event.target.value.localeCompare(shop.id)===0){
-           console.log(shop,'shop')
-       }
-   })
+  console.log(this.state.selected_shop,'selected_shop')
 }
 
 handleSelect(event){
   this.setState({ [event.target.name]: event.target.value });
-  // console.log( event.target.value ,'value')
-  // console.log(event.target.value,'selecetd id')
   this.state.data.map(mall=> {
     if(event.target.value.localeCompare(mall.id)===0){
-        // console.log(mall.sho,'selected mall data')s
-        // console.log(mall,'mall')
+      console.log(mall.shops,'shops')
         this.setState({
           mall_name:mall.name,
           mall_address: mall.address,
-          mall_shops:mall
+          mall_shops:mall.shops
       })
     }
   })
@@ -81,16 +73,14 @@ handleSelect(event){
 handleInit(value){
   this.state.data.map(mall=> {
     if(value.localeCompare(mall.id)===0){
-        // console.log(mall.sho,'selected mall data')s
-        // console.log(mall,'mall')
+        // console.log(mall.shops,'only shops')
         this.setState({
           mall_name:mall.name,
           mall_address: mall.address,
-          mall_shops:mall
+          mall_shops:mall.shops
       })
     }
   })
-  // console.log(this.state,'state now')
 }
 
 handleSubmit(event){
@@ -113,7 +103,7 @@ getShopDetails(){
       })
       .then(response => {
          let malls = []
-          console.log(response.data,'response')
+          // console.log(response.data,'response')
           if(response.data){
             response.data.mallsAndShops.map(value => {
                 malls.push({
@@ -170,9 +160,10 @@ getShopDetails(){
                         value={this.state.selected_mall}
                         onChange={this.handleSelect}
                       >
-                       {this.state.data.map(name => (
+                       {this.state.data.map((name,key) => (
                           <option
-                            key={name.name}
+                            key={key}
+                            id={key}
                             value={name.id}
                           >
                           {name.name}
@@ -217,10 +208,11 @@ getShopDetails(){
                     </Col>
                     <Col xs="12" md="9">
                       <Input type="select" name="selected_shop" value={this.state.selected_shop} onChange={this.handleShop} id="ccshop" >
-                         {this.state.mall_shops.shops &&  this.state.mall_shops.shops.length > 0  ? 
-                           this.state.mall_shops.shops.map(shop => (
+                         {this.state.mall_shops ? 
+                           this.state.mall_shops.map((shop,key) => (
                             <option
-                              key={shop.name}
+                              id={key}
+                              key={key}
                               value={shop.id}
                             >
                             {shop.name}
