@@ -34,11 +34,6 @@ export default {
             icon: 'icon-puzzle'
         },
         {
-            name: 'Delete Mall',
-            url: '/components/switches',
-            icon: 'icon-puzzle'
-        },
-        {
             name: 'Users',
             url: '/components/tables',
             icon: 'icon-puzzle'
