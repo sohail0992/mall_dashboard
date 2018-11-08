@@ -105,6 +105,7 @@ class Forms extends Component {
       .then(response => {
         console.log(response,'res');
         this.state = null
+        window.location.reload();
         this.stoploading()
       })
       .catch(error => {

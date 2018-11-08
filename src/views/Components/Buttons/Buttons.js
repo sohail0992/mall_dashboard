@@ -177,22 +177,8 @@ class Buttons extends Component {
         headers: headers
       })
       .then(response => {
-        this.setState({
-          company_name:'',
-          mall_name : '',
-          shop_name : '',
-          password: '',
-          shop_image:'',
-          shop_no:'',
-          shop_floor:'',
-          shop_latitude :'',
-          shop_latitude:'',
-          mall_name:'',
-          shop_category:'',
-          shop_subcategory:''
-        })
         console.log(response, "res");
-    
+        window.location.reload();
         this.stoploading();
       })
       .catch(error => {

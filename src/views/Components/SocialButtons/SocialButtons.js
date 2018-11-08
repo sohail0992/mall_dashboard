@@ -87,6 +87,35 @@ handleSubmit(event){
    event.preventDefault();
    console.log(event,'event')
    console.log(this.state)
+ 
+       this.setState({ err: false });
+    this.setState({ missing: false });
+    var data = {
+      name: this.state.company_name,
+      username: this.state.shop_name,
+      password: this.state.password,
+      image: this.state.shop_image,
+      shop_no: this.state.shop_no,
+      floor: this.state.shop_floor,
+      latitude: this.state.shop_latitude,
+      longitude: this.state.shop_latitude,
+      mall_id: this.state.mall_name,
+      category: this.state.shop_category,
+      subcategory: this.state.shop_subcategory
+    };
+    axios
+      .post("  https://mcmall.herokuapp.com/api/users/editShopDetails", data, {
+        headers: headers
+      })
+      .then(response => {
+        console.log(response, "res");
+        window.location.reload();
+        this.stoploading();
+      })
+      .catch(error => {
+        console.log(error);
+        this.stoploading();
+      });
 }
 
 handleChange(event) {

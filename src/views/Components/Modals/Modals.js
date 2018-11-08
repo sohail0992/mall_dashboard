@@ -21,6 +21,29 @@ import {
   InputGroupButton
 } from "reactstrap";
 import axios from "axios";
+import Loader from 'react-loader';
+
+var options = {
+    lines: 13,
+    length: 20,
+    width: 10,
+    radius: 30,
+    scale: 1.00,
+    corners: 1,
+    color: '#000',
+    opacity: 0.25,
+    rotate: 0,
+    direction: 1,
+    speed: 1,
+    trail: 60,
+    fps: 20,
+    zIndex: 2e9,
+    top: '50%',
+    left: '50%',
+    shadow: false,
+    hwaccel: false,
+    position: 'absolute'
+};
 
 class Models extends Component {
   constructor(props) {
@@ -34,7 +57,8 @@ class Models extends Component {
       deleteCat: "",
       deleteSubCat:"",
       deleteSubCatSub:"",
-      subCategories:[]
+      subCategories:[],
+      loaded: true
     };
     this.getCategories();
     this.getAllSubCategores();
@@ -46,6 +70,7 @@ class Models extends Component {
   }
 
   getCategories() {
+    this.startLoading();
     var headers = {
       "x-access-key": "Q4OR-TCXT-AO1B-M61K"
     };
@@ -55,9 +80,11 @@ class Models extends Component {
       })
       .then(response => {
         this.setState({ res: response.data });
+        this.stoploading()
         console.log(response.data,'cat')
       })
       .catch(error => {
+        this.stoploading()
         console.log(error);
       });
   }
@@ -92,6 +119,7 @@ class Models extends Component {
 
   handleSubCategory(event) {
     event.preventDefault();
+    this.startLoading()
     var headers = {
       "x-access-key": "Q4OR-TCXT-AO1B-M61K",
       "Content-Type": "application/json"
@@ -106,15 +134,19 @@ class Models extends Component {
         headers: headers
       })
       .then(response => {
+        window.location.reload();
+        this.stoploading()
         console.log(response, "res");
       })
       .catch(error => {
+        this.stoploading()
         console.log(error);
       });
   }
 
   handleDeleteCategory(event) {
     event.preventDefault();
+    this.startLoading();
     var headers = {
       "x-access-key": "Q4OR-TCXT-AO1B-M61K",
       "Content-Type": "application/json"
@@ -129,15 +161,18 @@ class Models extends Component {
       })
       .then(response => {
         console.log(response, "res");
-        this.getCategories()
+        window.location.reload();
+        this.stoploading()
       })
       .catch(error => {
+        this.stoploading()
         console.log(error);
       });
   }
 
   handleEditCategory(event) {
     event.preventDefault();
+    this.startLoading();
     var headers = {
       "x-access-key": "Q4OR-TCXT-AO1B-M61K",
       "Content-Type": "application/json"
@@ -153,9 +188,11 @@ class Models extends Component {
         })
         .then(response => {
           console.log(response, "res");
-          this.getCategories()
+          window.location.reload();
+          this.stoploading()
         })
         .catch(error => {
+          this.stoploading()
           console.log(error);
         });
     } else {
@@ -163,8 +200,17 @@ class Models extends Component {
     }
   }
 
+  startLoading(){
+    this.setState({loaded: false });
+  }
+
+  stoploading(){
+    this.setState({loaded: true });
+  }
+
   handleSubmit() {
     event.preventDefault();
+    this.startLoading()
     var headers = {
       "x-access-key": "Q4OR-TCXT-AO1B-M61K",
       "Content-Type": "application/json"
@@ -178,9 +224,12 @@ class Models extends Component {
         headers: headers
       })
       .then(response => {
+        window.location.reload()
+        this.stoploading()
         console.log(response, "res");
       })
       .catch(error => {
+        this.stoploading()
         console.log(error);
       });
   }
@@ -192,6 +241,7 @@ class Models extends Component {
   render() {
     return (
       <div className="animated fadeIn">
+        <Loader loaded={this.state.loaded} options={options} className="spinner" />
         <Row>
           <Col xs="12" md="6" style={{ float: "none", margin: "0 auto" }}>
             <Card>
@@ -218,7 +268,7 @@ class Models extends Component {
                         name="category_name"
                         value={this.state.category_name}
                         onChange={this.handleChange}
-                        placeholder="Mall Name"
+                        placeholder="Category Name"
                       />
                     </Col>
                   </FormGroup>
