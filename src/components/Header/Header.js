@@ -16,7 +16,6 @@ class Header extends Component {
 
   constructor(props) {
     super(props);
-
     this.toggle = this.toggle.bind(this);
     this.state = {
       dropdownOpen: false
@@ -53,7 +52,7 @@ class Header extends Component {
     return (
       <header className="app-header navbar">
         <NavbarToggler className="d-lg-none" onClick={this.mobileSidebarToggle}>&#9776;</NavbarToggler>
-        <NavbarBrand href="#"></NavbarBrand>
+         <NavLink href="#">Home</NavLink>
         <NavbarToggler className="d-md-down-none" onClick={this.sidebarToggle}>&#9776;</NavbarToggler>
         <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">

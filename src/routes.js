@@ -1,9 +1,9 @@
 const routes = {
-  '/': 'Home',
-  '/dashboard': 'Dashboard',
+  '/': 'Buttons',
+  // '/dashboard': 'Dashboard',
   '/components': 'Components',
   '/charts': 'Charts',
-  '/components/buttons': 'Buttons',
+  'createShop': 'Buttons',
   '/components/social-buttons': 'Social Buttons',
   '/components/cards': 'Cards',
   '/components/forms': 'Forms',

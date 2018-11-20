@@ -32,8 +32,8 @@ class Full extends Component {
             <Container fluid>
               <Switch>
                 <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
-                <Route path="/components/buttons" name="Buttons" component={Buttons}/>
-                <Route path="/components/cards" name="Cards" component={Cards}/>
+                <Route path="/createShop" name="Buttons" component={Buttons}/>
+                <Route path="/Components/cards" name="Cards" component={Cards}/>
                 <Route path="/components/forms" name="Forms" component={Forms}/>
                 <Route path="/components/modals" name="Modals" component={Modals}/>
                 <Route path="/components/social-buttons" name="Social Buttons" component={SocialButtons}/>
@@ -44,7 +44,7 @@ class Full extends Component {
                 <Route path="/icons/simple-line-icons" name="Simple Line Icons" component={SimpleLineIcons}/>
                 <Route path="/widgets" name="Widgets" component={Widgets}/>
                 <Route path="/charts" name="Charts" component={Charts}/>
-                <Redirect from="/" to="/dashboard"/>
+                <Redirect from="/" to="/createShop"/>
               </Switch>
             </Container>
           </main>

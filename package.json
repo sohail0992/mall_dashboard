@@ -54,7 +54,7 @@
     "clean": "rimraf ./build"
   },
   "engines": {
-    "node": "8.11.4",
-    "npm": "5.6.0"
+    "node": "^8.11.4",
+    "npm": "^5.6.0"
   }
 }
