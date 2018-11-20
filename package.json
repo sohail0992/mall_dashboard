@@ -5,8 +5,11 @@
   "author": "Łukasz Holeczek <lukasz@holeczek.pl>",
   "url": "http://coreui.io",
   "copyright": "Copyright 2017 creativeLabs Łukasz Holeczek",
-  "license": "MIT",
   "private": true,
+  "engines": {
+    "npm": "5.6.0",
+    "node": "8.11.3"
+  },
   "homepage": ".",
   "devDependencies": {
     "babel-core": "^6.25.0",
